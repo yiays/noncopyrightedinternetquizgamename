@@ -1,0 +1,13 @@
+(0) #init state
+(1,timeout) #lobby
+(1.5,timeout,stringstate) #waiting for players
+(2) #selecting collection
+(3,timeout,places) #preparing next question
+(4,timeout,places) #ingame
+(5,timeout,places,right,leaderboard) #show results
+
+channel,player,score,answer,time
+
+Game: channel,state=-1,countdown=-1,waitingplayers=[],lobbyplayers=[],questions=[],scoreboard={},lobbymsg=None,lead=""
+Question: question,duration=15,answers=[],answerstrings=[]
+Player: auth,ip=None,game,player,lead="",score=0,answer=-1,anstime=-1,streak=0

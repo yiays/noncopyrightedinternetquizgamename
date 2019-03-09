@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<title>Currently Playing - Kahoot.Discord</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="description" content="Play your favourite quiz game in Discord!" />
+		<meta name="keywords" content="kahoot trivia quiz discord bot chatbot" />
+		<meta name="robots" content="index,follow" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" type="text/css" href="/main.css" />
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	</head>
+
+	<body>
+		<div class="hidden dummy-em"></div>
+		<header>
+			<div class="wrapper">
+				<h1>Kahoot.Discord</h1>
+				<span class="username">...</span>
+			</div>
+		</header>
+		<div class="fullscreen">
+			<div class="quadparent live">
+				<div class="top left quadrant red"></div>
+				<div class="top right quadrant blue"></div>
+				<div class="bottom left quadrant yellow"></div>
+				<div class="bottom right quadrant green"></div>
+			</div>
+			<div id="countdown">
+				<div id="countdown-number">0</div>
+				<svg>
+					<circle r="25" cx="30" cy="30"></circle>
+					<circle r="20" cx="30" cy="30"></circle>
+				</svg>
+			</div>
+		</div>
+		<footer>
+			<div class="wrapper">
+				<span class="lead"></span>
+				<span class="score">0<span>
+			</div>
+		</footer>
+		<script src="/main.js"></script>
+		<script src="/game.js"></script>
+	</body>
+</html>
