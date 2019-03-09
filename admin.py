@@ -11,7 +11,7 @@ class Admin:
 	async def help(self, ctx, *, search=None):
 		if config.verbose: print('help command')
 		embed = discord.Embed(title="k!help", colour=discord.Colour(0x5675a3), url="http://yiaysmc.noip.me:8888/", description="Kahoot.Discord brings the wonders of Kahoot to group messengers.")
-		embed.set_footer(text=f"Kahoot.Discord v{config.ver}", icon_url="https://cdn.discordapp.com/embed/avatars/0.png")
+		embed.set_footer(text=f"Kahoot.Discord v{config.ver}", icon_url="https://cdn.discordapp.com/avatars/553870204078260224/1f93a197e4d39a95d97e50a7cd8e6e1d.png")
 		for command in config.dhelp:
 			if search:
 				if command.lower().find(search):
@@ -23,7 +23,7 @@ class Admin:
 	async def privacy(self,ctx):
 		if config.verbose: print('privacy command')
 		embed=discord.Embed(title="k!privacy", colour=discord.Colour(0x5675a3), url="http://yiaysmc.noip.me:8888/", description="Because of the nature of Kahoot, you need to use a website to play. Here's your privacy policy for that site.")
-		embed.set_footer(text=f"Kahoot.Discord v{config.ver}", icon_url="https://cdn.discordapp.com/embed/avatars/0.png")
+		embed.set_footer(text=f"Kahoot.Discord v{config.ver}", icon_url="https://cdn.discordapp.com/avatars/553870204078260224/1f93a197e4d39a95d97e50a7cd8e6e1d.png")
 		embed.add_field(name="When visiting the homepage",value="While visiting the homepage, you are served a static web page and nothing is stored or logged.")
 		embed.add_field(name="When playing the game",value="While playing Kahoot with the website in game or seeing the results page, the unique url in the address bar identifies you.")
 		embed.add_field(name="What we do with this information",value="**Your IP address isn't used.** The unique code in the URL (looks like `1f2e3`) works alone to associate your choices in the game with your username in Discord. This means it's very important that you don't share this link with other players.")
