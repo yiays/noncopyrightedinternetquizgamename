@@ -78,7 +78,7 @@ class Logic:
 		if ctx.channel in config.games:
 			for player in config.games[ctx.channel].players():
 				if player.auth in config.authcodes:
-					del config.authcodes[auth]
+					del config.authcodes[player.auth]
 			del config.games[ctx.channel]
 		for msg in self.delet:
 			await self.delet.remove(msg)
@@ -143,7 +143,7 @@ class Logic:
 				game.state,game.countdown = 1,round(timeout-time.time()) #lobby
 			elif time.time()>timeout+60: break
 			else:
-				game.lead=f"Waiting for more players... ({len(config.readyplayers[ctx.channel])} joined, {math.ceil(len(self.players[ctx.channel])/2)} required, {len(self.players[ctx.channel])} total)"
+				game.lead=f"Waiting for more players... ({len(game.lobbyplayers)} joined, {math.ceil(len(game.players())/2)} required, {len(game.players())} total)"
 				game.state,game.countdown=1.5,round(timeout+60-time.time()) #waiting for players
 			if not await self.updatestatus(game,game.lead):
 				await self.gamecleanup(ctx)

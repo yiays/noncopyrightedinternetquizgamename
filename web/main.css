@@ -35,12 +35,18 @@ footer{
     height: 10.05em;
 }
 
-.score,.username{
+.score,.streak,.username{
 	float:right;
 	background:#fff;
 	color:#111;
 	padding:0.25em;
 	border-radius:0.25em;
+}
+.streak{
+	background:#eb3b5a;
+	color:#fff;
+	margin-left:0.5em;
+	font-size:0.75em;
 }
 .username{
 	position:relative;
@@ -92,6 +98,18 @@ footer{
 .red{
 	background-color:#eb3b5a;
 }
+.correct.green{
+	background-color:#15d33b !important;
+}
+.correct.yellow{
+	background-color:#e8ca20 !important;
+}
+.correct.blue{
+	background-color:#2985db !important;
+}
+.correct.red{
+	background-color:#db311e !important;
+}
 .dead>.green:not(.chosen){
 	background-color:#5ca57f;
 }
@@ -117,6 +135,11 @@ footer{
 	width:50%;
 	height:50%;
 	transition: background-color 250ms;
+	text-align: center;
+	vertical-align: middle;
+	line-height: 100%;
+	font-size:5em;
+	color:white;
 }
 .quadrant.left{
 	left:0;
@@ -150,6 +173,43 @@ footer{
   line-height:38px;
   z-index:801;
 }
+
+.leaderboard{
+	position:fixed;
+    z-index:1100;
+    margin:auto;
+    height:20em;
+	min-width:16em;
+	transition:top 0.25s ease;
+    top:250%;
+    left:50%;
+    bottom:50%;
+    transform:translateX(-50%);
+    background:#ddd;
+    padding:1em 2em;
+    border-radius:1em;
+    box-shadow:rgba(0,0,0,0.3) 0 0.25em 1em;
+	border-width:0.2em;
+	border-style:solid;
+	border-top-color:#20bf6b;
+	border-right-color:#f7b731;
+	border-bottom-color:#3867d6;
+	border-left-color:#eb3b5a;
+}
+.leaderboard table{
+	width:100%;
+}
+.leaderboard table th{
+	font-size:0.5em;
+	text-align:left;
+}
+.leaderboard table tr:nth-child(odd){
+	background:#ccc;
+}
+.leaderboard table tr:first-child{
+	background:#bbb;
+}
+
 svg{
   transform: rotateY(-180deg) rotateZ(-90deg);
   width:60px;

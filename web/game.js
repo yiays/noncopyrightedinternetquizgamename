@@ -1,4 +1,5 @@
 let lasttime=0;
+let buttonmap=['.red','.blue','.yellow','.green'];
 function getstate(){
 	$.ajax({
 		method:"POST",
@@ -26,17 +27,37 @@ function getstate(){
 			$('.username').text(data.player);
 			$('.lead').text(data.lead);
 			$('.score').text(data.score);
+			$('.streak').text(data.streak+" streak");
 			lasttime=data.time;
+			
+			if(data.state==5){ //results
+				$.each(data.answers,function(i){
+					$(buttonmap[data.answers[i]]).addClass('correct').text('✓');
+				});
+				$('.quadrant').not('.correct').addClass('wrong').text('✗');
+				
+				if(data.time<5){
+					$('.leaderboard').css({'top':'50%'});
+				}
+				$('.leaderboard table tr').not(':first').remove();
+				let html="";
+				let str=data.leaderboard.split("\n");
+				$.each(data.leaderboard.split("\n"),function(i){
+					var player = str[i].substring(0, str[i].lastIndexOf(" ")+1);
+					var score = str[i].substring(str[i].lastIndexOf(" ")+1,str[i].length);
+					html+="<tr><td>"+player+"</td><td>"+score+"</td></tr>";
+				});
+				$('.leaderboard table tr').first().after(html);
+			}else{
+				$('.leaderboard').css({'top':'250%'});
+				$('.quadrant').removeClass('correct').removeClass('wrong').text('');
+			}
 		},
 		error: function(response) {
 			console.log("Failed to get state.");
-			if(response.status==410){
-				alert("Game over! Thanks for playing!");
-				window.location="/";
-			}
 			if(response.status==403){
-				alert("You're not authorised to be here.");
-				window.location="/";
+				alert("Game over! Thanks for playing!");
+				window.location="/results.html";
 			}
 			return false;
 		}

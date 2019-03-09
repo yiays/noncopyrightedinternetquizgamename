@@ -83,7 +83,7 @@ async def on_reaction_add(reaction,user):
 	await gameclass.inviteplayers(reaction.message.channel,user)
 
 print('connecting...')
-bot.run(config.token)
+bot.run(os.environ.get("KahootDiscord"))
 
 #shutdown
 

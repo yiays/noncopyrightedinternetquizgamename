@@ -66,44 +66,40 @@ async def gamecomm(request):
 	id = str(request.rel_url)[6:]
 	if id in config.authcodes:
 		player=config.authcodes[id]
-		if player.is_ready:
-			data=await request.post()
-			if data['cmd']=='getstate': #updates the client on the general state of the game
-				state={'player':player.name,'state':player.game.state,'score':player.score}
-				if player.game.state==0: #init state
-					state.update({'time':-1,'answered':True,'lead':"Game is intializing, you shouldn't be here yet."})
-				elif player.game.state==1: #in lobby
-					state.update({'time':player.game.countdown,'answered':True,'lead':"Welcome to the lobby for #"+player.channel.name+'!'})
-				elif player.game.state==1.5: #waiting for players
-					state.update({'time':player.game.countdown,'answered':True,'lead':player.game.lead})
-				elif player.game.state==2: #sellecting collection
-					state.update({'time':-1,'answered':True,'lead':"The user that started this Kahoot is choosing a category..."})
-				elif player.game.state==3: #preparing next question
-					state.update({'time':player.game.countdown,'answered':True,'lead':player.lead})
-				elif player.game.state==4: #in game
-					state.update({'time':player.game.countdown,'answered':(False if player.answer==-1 else True),'lead':player.lead})
-				elif player.game.state==5: #show results
-					state.update({'time':player.game.countdown,'answered':True,'answers':player.game.questions[-1].answers,'leaderboard':player.game.scoreboard,'lead':player.lead,'streak':player.streak})
-				
-				if len(player.lead)>0:
-					state['lead']=player.lead
-				else:
-					state['lead']="kahoot rewards speedy answers with more points."
-				
-				return web.Response(text=json.dumps(state),status=200,headers={'content-type':'application/json'})
-			elif data['cmd']=='btn':
-				if player.answer==-1 and player.game.state==4: #if the player hasn't answered and we're ingame
-					player.answer=int(data['answer'])
-					print(f"{player.name} pressed button {data['answer']}")
-					return web.Response(status="200")
-				print(f"{player.name} pressed button {data['answer']}, but it was already set to {player.answer}")
-				return web.Response(status="400")
-			else:
-				return web.Response(text="Bad Request.",status="400")
+		data=await request.post()
+		if data['cmd']=='getstate': #updates the client on the general state of the game
+			state={'player':player.name,'state':player.game.state,'score':player.score,'streak':player.streak}
+			if player.game.state==0: #init state
+				state.update({'time':-1,'answered':True,'lead':"Game is intializing, you shouldn't be here yet."})
+			elif player.game.state==1: #in lobby
+				state.update({'time':player.game.countdown,'answered':True,'lead':"Welcome to the lobby for #"+player.channel.name+'!'})
+			elif player.game.state==1.5: #waiting for players
+				state.update({'time':player.game.countdown,'answered':True,'lead':player.game.lead})
+			elif player.game.state==2: #sellecting collection
+				state.update({'time':-1,'answered':True,'lead':"The user that started this Kahoot is choosing a category..."})
+			elif player.game.state==3: #preparing next question
+				state.update({'time':player.game.countdown,'answered':True,'lead':player.lead})
+			elif player.game.state==4: #in game
+				state.update({'time':player.game.countdown,'answered':(False if player.answer==-1 else True),'lead':player.lead})
+			elif player.game.state==5: #show results
+				state.update({'time':player.game.countdown,'answered':True,'answers':player.game.questions[-1].answers,'leaderboard':player.game.scoreboard,'lead':player.lead,'streak':player.streak})
+			
+			if state['lead'] is None or len(state['lead'])<1:
+				state['lead']="kahoot rewards speedy answers with more points."
+			
+			return web.Response(text=json.dumps(state),status=200,headers={'content-type':'application/json'})
+		elif data['cmd']=='btn':
+			if player.answer==-1 and player.game.state==4: #if the player hasn't answered and we're ingame
+				player.answer=int(data['answer'])
+				print(f"{player.name} pressed button {data['answer']}")
+				return web.Response(status="200")
+			if player.game.state==4:print(f"{player.name} pressed button {data['answer']}, but it was already set to {player.answer}")
+			else: print(f"{player.name} pressed button {data['answer']} too late, the game is now in state {player.game.state}")
+			return web.Response(status="400")
 		else:
-			return web.Response(text="Game over. (410: Gone)",status=410)
+			return web.Response(text="Bad Request.",status="400")
 	elif id=='demo':
-		state={'player':'Player#1234','state':-1,'score':5480,'time':1,'answered':True,'lead':"Welcome to demo mode!"}
+		state={'player':'Player#1234','state':5,'score':5480,'streak':3,'time':1,'answered':True,'lead':"Welcome to demo mode!",'answers':[1,2],'leaderboard':"Yiays#5930 (1st): 5480\nDuncan#1234 (2nd): 2456"}
 		return web.Response(text=json.dumps(state),status=200,headers={'content-type':'application/json'})
 	else: return web.Response(text="Your address is invalid.",status=403)
 @routes.get("/game.css")

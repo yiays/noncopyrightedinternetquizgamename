@@ -29,11 +29,11 @@ dhelp={'kahoot':
 games={}
 authcodes={}
 
-verbose,token,logchannel,modchannel,apiurl,apiport,ver,lastver,changes,superusers=(None,)*10
+verbose,logchannel,modchannel,apiurl,apiport,ver,lastver,changes,superusers=(None,)*9
 questions,collections,ratings=(None,)*3
 
 def reload():
-	global verbose,token,logchannel,modchannel,apiurl,apiport,ver,lastver,changes,superusers
+	global verbose,logchannel,modchannel,apiurl,apiport,ver,lastver,changes,superusers
 	global questions,collections,ratings
 	
 	print('reading config...')
@@ -41,7 +41,6 @@ def reload():
 
 	#settings
 	verbose=config.getint('settings','verbose')
-	token=config.get('settings','token')
 	logchannel=config.getint('settings','logchannel')
 	modchannel=config.getint('settings','modchannel')
 	apiurl=config.get('settings','apiurl')
