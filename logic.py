@@ -115,7 +115,7 @@ class Logic:
 				config.authcodes[auth]=p
 				#except:
 					#self.delet.append(await game.channel.send(player.mention+", I wasn't able to DM you... Change your privacy settings and try again another time."))
-				self.updatestatus(game)
+				await self.updatestatus(game)
 			else:
 				print(player.display_name+"'s reaction was ignored.")
 	

@@ -17,6 +17,24 @@ class Question:
 class Admin:
 	def __init__(self,bot):
 		self.bot=bot
+		self.paginate={}
+	
+	async def handle_react(self,reaction,user):
+		channel=reaction.message.channel
+		if channel in self.paginate:
+			if reaction.message==self.paginate[channel]:
+				if reaction.emoji in reaction_numbers:
+					print("handling reaction")
+					page=reaction_numbers.index(reaction.emoji)
+					questions=self.getquestions(page=page,limit=10)
+					str=f"Page {page}:```"+"\n".join([f"{i+1+(page-1)*10}: {q.question} {', '.join(q.answerstrings[:-1])} or {q.answerstrings[-1]}." for i,q in enumerate(questions)])+"```"
+					if len(str)<=6: str="```None found!```"
+					await questionselection.edit(str)
+				await reaction.delete()
+			else:
+				print("ignored reaction because the message didn't match up.")
+		else:
+			print("ignored reaction because the channel didn't match up.")
 	
 	def getquestions(self,page=0,sort=None,search=None,limit=30):
 		result=[]
@@ -138,10 +156,11 @@ class Admin:
 		await ctx.channel.send("Your collection will be named '"+collection+"', now please select some questions.")
 		
 		questions=self.getquestions(limit=10) #need to sort this eventually
+		
 		str="Page 1:```"+"\n".join([f"{i+1}: {q.question} {', '.join(q.answerstrings[:-1])} or {q.answerstrings[-1]}." for i,q in enumerate(questions)])+"```"
 		if len(str)<=6: str="```None found!```"
-		
 		questionselection=await ctx.channel.send(str)
+		self.paginate[ctx.channel]=questionselection
 		if len(config.questions)>10:
 			await ctx.channel.send("React with the page number to see more.")
 			for i in range(0,math.ceil(len(config.questions)/10)):
