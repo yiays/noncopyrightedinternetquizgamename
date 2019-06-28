@@ -23,8 +23,18 @@ header,footer{
 	min-height:2em;
 }
 footer{
-	background-color:#000;
-	color:#fff;
+	background-color: #000;
+    bottom: 0;
+    color: #fff;
+    position: fixed;
+    width: 100%;
+}
+
+footer p {
+    transform: translate(-50%, -50%);
+    margin-right: -50%;
+    left: 50%;
+    position: absolute;
 }
 
 .hidden{
@@ -125,21 +135,37 @@ footer{
 
 .quadparent{
 	position:relative;
+	width: 100%;
 	height:15em;
 }
 .quadparent.live > .quadrant{
 	cursor:pointer;
 }
 .quadrant{
-	position:absolute;
-	width:50%;
-	height:50%;
+	float:left;
+	position: relative;
+    width: 50%;
+    overflow: hidden;
 	transition: background-color 250ms;
 	text-align: center;
 	vertical-align: middle;
 	line-height: 100%;
 	font-size:5em;
 	color:white;
+}
+.quadrant:before{
+	content: "";
+    display: inline-block;
+    padding-top: 100%;
+}
+.square-space{
+    position:  absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    color: white;
+    text-align: center;
 }
 .quadrant.left{
 	left:0;

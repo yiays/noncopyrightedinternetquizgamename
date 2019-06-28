@@ -1,3 +1,9 @@
+"""
+	KahootDiscord - created by Yiays#5930
+	https://kahoot.yiays.com
+	A Discord port of Kahoot.
+"""
+
 import discord, os, traceback, asyncio, importlib, time
 import config, genimg
 from discord.ext import commands
@@ -25,7 +31,7 @@ config.modules['logic']=logic
 gameclass=logic.Logic(bot)
 bot.add_cog(gameclass)
 
-class Reload:
+class Reload(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
 	@commands.command(pass_context=True,no_pm=False)
@@ -40,6 +46,16 @@ class Reload:
 			elif module=='config':
 				config.reload()
 				await ctx.channel.send("reloaded `"+module+"` succesfully!")
+			elif module=='logic':
+				bot.remove_cog('Logic')
+				logic=importlib.reload(config.modules['logic'])
+				gameclass=logic.Logic(bot)
+				bot.add_cog(gameclass)
+			elif module==admin:
+				bot.remove_cog('Admin')
+				admin=importlib.reload(config.modules['admin'])
+				adminclass=admin.Admin(bot)
+				bot.add_cog(adminclass)
 			elif module in config.modules and config.modules[module]:
 				try:
 					bot.remove_cog(module.capitalize())

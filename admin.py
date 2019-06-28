@@ -14,7 +14,7 @@ class Question:
 		self.answerstrings=answerstrings
 		self.creator=creator
 
-class Admin:
+class Admin(commands.Cog):
 	def __init__(self,bot):
 		self.bot=bot
 		self.paginate={}
@@ -22,17 +22,14 @@ class Admin:
 	async def handle_react(self,reaction,user):
 		channel=reaction.message.channel
 		if channel in self.paginate:
-			if reaction.message==self.paginate[channel]:
-				if reaction.emoji in reaction_numbers:
-					print("handling reaction")
-					page=reaction_numbers.index(reaction.emoji)
-					questions=self.getquestions(page=page,limit=10)
-					str=f"Page {page}:```"+"\n".join([f"{i+1+(page-1)*10}: {q.question} {', '.join(q.answerstrings[:-1])} or {q.answerstrings[-1]}." for i,q in enumerate(questions)])+"```"
-					if len(str)<=6: str="```None found!```"
-					await questionselection.edit(str)
-				await reaction.delete()
-			else:
-				print("ignored reaction because the message didn't match up.")
+			if reaction.emoji in reaction_numbers:
+				print("handling reaction")
+				page=reaction_numbers.index(reaction.emoji)
+				questions=self.getquestions(page=page,limit=10)
+				str=f"Page {page}:```"+"\n".join([f"{i+1+(page-1)*10}: {q.question} {', '.join(q.answerstrings[:-1])} or {q.answerstrings[-1]}." for i,q in enumerate(questions)])+"```"
+				if len(str)<=6: str="```None found!```"
+				await self.paginate[channel].edit(str)
+			await reaction.delete()
 		else:
 			print("ignored reaction because the channel didn't match up.")
 	
@@ -54,7 +51,7 @@ class Admin:
 	@commands.command(pass_context=True, no_pm=False, aliases=['?','??'])
 	async def help(self, ctx, *, search=None):
 		if config.verbose: print('help command')
-		embed = discord.Embed(title="k!help", colour=discord.Colour(0x5675a3), url="http://yiaysmc.noip.me:8888/", description="Kahoot.Discord brings the wonders of Kahoot to group messengers.")
+		embed = discord.Embed(title="k!help", colour=discord.Colour(0x5675a3), url="https://kahoot.yiays.com/", description="Kahoot.Discord brings the wonders of Kahoot to group messengers.")
 		embed.set_footer(text=f"Kahoot.Discord v{config.ver}", icon_url="https://cdn.discordapp.com/avatars/553870204078260224/1f93a197e4d39a95d97e50a7cd8e6e1d.png")
 		for command in config.dhelp:
 			if search:
@@ -66,7 +63,7 @@ class Admin:
 	@commands.command(pass_context=True, no_pm=False, aliases=['privacypolicy'])
 	async def privacy(self,ctx):
 		if config.verbose: print('privacy command')
-		embed=discord.Embed(title="k!privacy", colour=discord.Colour(0x5675a3), url="http://yiaysmc.noip.me:8888/", description="Because of the nature of Kahoot, you need to use a website to play. Here's your privacy policy for that site.")
+		embed=discord.Embed(title="k!privacy", colour=discord.Colour(0x5675a3), url="https://kahoot.yiays.com/", description="Because of the nature of Kahoot, you need to use a website to play. Here's your privacy policy for that site.")
 		embed.set_footer(text=f"Kahoot.Discord v{config.ver}", icon_url="https://cdn.discordapp.com/avatars/553870204078260224/1f93a197e4d39a95d97e50a7cd8e6e1d.png")
 		embed.add_field(name="When visiting the homepage",value="While visiting the homepage, you are served a static web page and nothing is stored or logged.")
 		embed.add_field(name="When playing the game",value="While playing Kahoot with the website in game or seeing the results page, the unique url in the address bar identifies you.")
