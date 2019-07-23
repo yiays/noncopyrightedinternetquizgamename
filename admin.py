@@ -1,16 +1,57 @@
 import config, genimg
 from discord.ext import commands
 from random import randint
-import discord, asyncio
+import discord, asyncio, math
 
-class Admin:
+reaction_numbers = ["\u0030\u20E3","\u0031\u20E3","\u0032\u20E3","\u0033\u20E3","\u0034\u20E3","\u0035\u20E3", "\u0036\u20E3","\u0037\u20E3","\u0038\u20E3","\u0039\u20E3"]
+
+class Question:
+	def __init__(self,qid,question,duration=15,answers="",answerstrings=[],creator=None):
+		self.qid=qid
+		self.question=question
+		self.duration=duration
+		self.answers=answers
+		self.answerstrings=answerstrings
+		self.creator=creator
+
+class Admin(commands.Cog):
 	def __init__(self,bot):
 		self.bot=bot
+		self.paginate={}
+	
+	async def handle_react(self,reaction,user):
+		channel=reaction.message.channel
+		if channel in self.paginate:
+			if reaction.emoji in reaction_numbers:
+				print("handling reaction")
+				page=reaction_numbers.index(reaction.emoji)
+				questions=self.getquestions(page=page,limit=10)
+				str=f"Page {page}:```"+"\n".join([f"{i+1+(page-1)*10}: {q.question} {', '.join(q.answerstrings[:-1])} or {q.answerstrings[-1]}." for i,q in enumerate(questions)])+"```"
+				if len(str)<=6: str="```None found!```"
+				await self.paginate[channel].edit(str)
+			await reaction.delete()
+		else:
+			print("ignored reaction because the channel didn't match up.")
+	
+	def getquestions(self,page=0,sort=None,search=None,limit=30):
+		result=[]
+		i=page*limit
+		for qid,q in config.questions.items():
+			if i in range(page*limit,min(len(config.questions),page*limit+limit)):
+				if len(q)>3: #question has an author
+					try:
+						creator=self.bot.get_user(q[4])
+					except:
+						creator=None
+				result.append(Question(qid,question=q[1],duration=q[3],answers=q[0],answerstrings=q[2],creator=creator))
+			else: break
+			i+=1
+		return result
 	
 	@commands.command(pass_context=True, no_pm=False, aliases=['?','??'])
 	async def help(self, ctx, *, search=None):
 		if config.verbose: print('help command')
-		embed = discord.Embed(title="k!help", colour=discord.Colour(0x5675a3), url="http://yiaysmc.noip.me:8888/", description="Kahoot.Discord brings the wonders of Kahoot to group messengers.")
+		embed = discord.Embed(title="k!help", colour=discord.Colour(0x5675a3), url="https://kahoot.yiays.com/", description="Kahoot.Discord brings the wonders of Kahoot to group messengers.")
 		embed.set_footer(text=f"Kahoot.Discord v{config.ver}", icon_url="https://cdn.discordapp.com/avatars/553870204078260224/1f93a197e4d39a95d97e50a7cd8e6e1d.png")
 		for command in config.dhelp:
 			if search:
@@ -22,7 +63,7 @@ class Admin:
 	@commands.command(pass_context=True, no_pm=False, aliases=['privacypolicy'])
 	async def privacy(self,ctx):
 		if config.verbose: print('privacy command')
-		embed=discord.Embed(title="k!privacy", colour=discord.Colour(0x5675a3), url="http://yiaysmc.noip.me:8888/", description="Because of the nature of Kahoot, you need to use a website to play. Here's your privacy policy for that site.")
+		embed=discord.Embed(title="k!privacy", colour=discord.Colour(0x5675a3), url="https://kahoot.yiays.com/", description="Because of the nature of Kahoot, you need to use a website to play. Here's your privacy policy for that site.")
 		embed.set_footer(text=f"Kahoot.Discord v{config.ver}", icon_url="https://cdn.discordapp.com/avatars/553870204078260224/1f93a197e4d39a95d97e50a7cd8e6e1d.png")
 		embed.add_field(name="When visiting the homepage",value="While visiting the homepage, you are served a static web page and nothing is stored or logged.")
 		embed.add_field(name="When playing the game",value="While playing Kahoot with the website in game or seeing the results page, the unique url in the address bar identifies you.")
@@ -104,8 +145,24 @@ class Admin:
 			await ctx.channel.send(config.dhelp['collection'])
 		return
 	@collection.command(pass_context=True,name='add')
-	async def addcollection(self,ctx,*,question):
-		ctx.channel.send("To be implemented...")
+	async def addcollection(self,ctx,*,collection):
+		if config.verbose: print('collection add command')
+		if len(collection)<1:
+			await ctx.channel.send("Please provide a proper collection name in the command.")
+			return
+		await ctx.channel.send("Your collection will be named '"+collection+"', now please select some questions.")
+		
+		questions=self.getquestions(limit=10) #need to sort this eventually
+		
+		str="Page 1:```"+"\n".join([f"{i+1}: {q.question} {', '.join(q.answerstrings[:-1])} or {q.answerstrings[-1]}." for i,q in enumerate(questions)])+"```"
+		if len(str)<=6: str="```None found!```"
+		questionselection=await ctx.channel.send(str)
+		self.paginate[ctx.channel]=questionselection
+		if len(config.questions)>10:
+			await ctx.channel.send("React with the page number to see more.")
+			for i in range(0,math.ceil(len(config.questions)/10)):
+				await questionselection.add_reaction(reaction_numbers[i+1]) #supports a max of 9 pages
+		
 	@commands.command(pass_context=True)
 	async def collections(self,ctx,*,search):
 		if len(search)<1:

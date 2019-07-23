@@ -66,7 +66,7 @@ class Player:
 			self.streak=0
 			return False
 
-class Logic:
+class Logic(commands.Cog):
 	def __init__(self,bot):
 		self.bot=bot
 		config.games={}
@@ -106,7 +106,7 @@ class Logic:
 				while auth in config.authcodes:
 					auth=str(hex(randint(2**16,2**20-1)))[2:]
 				#try:
-				tmpmsg=await player.send(f"Join the game here; http://yiaysmc.noip.me:8888/auth/{auth} then, return to {game.channel.mention} for the questions!\n"+\
+				tmpmsg=await player.send(f"Join the game here; https://kahoot.yiays.com/auth/{auth} then, return to {game.channel.mention} for the questions!\n"+\
 										  "**Note:** this link is designed to uniquely identify your account, don't share this link with other people.\n"+\
 										  "If you're concerned, you might wanna read the `k!privacy` policy before you click this link.")
 				self.delet.append(tmpmsg)
@@ -115,7 +115,7 @@ class Logic:
 				config.authcodes[auth]=p
 				#except:
 					#self.delet.append(await game.channel.send(player.mention+", I wasn't able to DM you... Change your privacy settings and try again another time."))
-				self.updatestatus(game)
+				await self.updatestatus(game)
 			else:
 				print(player.display_name+"'s reaction was ignored.")
 	
@@ -200,7 +200,7 @@ class Logic:
 			game.questions.append(question)
 			
 			em=discord.Embed(title=question.question)
-			em.set_image(url=f"http://yiaysmc.noip.me:8888/questions/{qid}.png?v={config.ver}")
+			em.set_image(url=f"https://kahoot.yiays.com/questions/{qid}.png?v={config.ver}")
 			await qmsg.edit(content=f"⏰ {round(timeout-time.time())}",embed=em)
 			
 			while time.time()<timeout:
