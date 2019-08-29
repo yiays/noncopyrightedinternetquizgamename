@@ -112,6 +112,9 @@ async def js(request):
 	if config.verbose: print('GET /game.js')
 	with open('web/game.js',encoding='utf8') as f:
 		return web.Response(text=f.read(),status=200,headers={'content-type':'application/javascript'})
+@routes.get("/results.html")
+async def js(request):
+	return web.Response(text="I'm still working on the results page, sorry.")
 	
 
 app=web.Application()

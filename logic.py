@@ -81,8 +81,8 @@ class Logic(commands.Cog):
 					del config.authcodes[player.auth]
 			del config.games[ctx.channel]
 		for msg in self.delet:
-			await self.delet.remove(msg)
 			await msg.delete()
+		self.delet=[]
 	
 	async def updatestatus(self,game,status=None):
 		if status is None:
