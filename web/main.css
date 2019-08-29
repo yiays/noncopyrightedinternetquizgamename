@@ -148,8 +148,6 @@ footer p {
 }
 
 .fullscreen .quadrant:before {
-	position: absolute;
-	height: 50%;
 	padding-top: 33%;
 }
 
