@@ -144,19 +144,20 @@ footer p {
 .quadrant{
 	float:left;
 	position: relative;
-    width: 50%;
-    overflow: hidden;
+	width: 50%;
+	height: 50%;
+	overflow: hidden;
 	transition: background-color 250ms;
 	text-align: center;
 	vertical-align: middle;
-	line-height: 100%;
+	line-height: 50%;
 	font-size:5em;
 	color:white;
 }
 .quadrant:before{
 	content: "";
     display: inline-block;
-    padding-top: 100%;
+    padding-top: 33%;
 }
 .square-space{
     position:  absolute;
