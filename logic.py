@@ -106,7 +106,7 @@ class Logic(commands.Cog):
 				while auth in config.authcodes:
 					auth=str(hex(randint(2**16,2**20-1)))[2:]
 				#try:
-				tmpmsg=await player.send(f"Join the game here; https://kahoot.yiays.com/auth/{auth} then, return to {game.channel.mention} for the questions!\n"+\
+				tmpmsg=await player.send(f"Join the game here; {config.apiurl}{auth} then, return to {game.channel.mention} for the questions!\n"+\
 										  "**Note:** this link is designed to uniquely identify your account, don't share this link with other people.\n"+\
 										  "If you're concerned, you might wanna read the `k!privacy` policy before you click this link.")
 				self.delet.append(tmpmsg)
@@ -200,7 +200,7 @@ class Logic(commands.Cog):
 			game.questions.append(question)
 			
 			em=discord.Embed(title=question.question)
-			em.set_image(url=f"https://kahoot.yiays.com/questions/{qid}.png?v={config.ver}")
+			em.set_image(url=f"{config.apiurl}questions/{qid}.png?v={config.ver}")
 			await qmsg.edit(content=f"⏰ {round(timeout-time.time())}",embed=em)
 			
 			while time.time()<timeout:
