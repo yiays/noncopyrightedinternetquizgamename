@@ -141,6 +141,12 @@ footer p {
 .quadparent.live > .quadrant{
 	cursor:pointer;
 }
+
+.fullscreen .quadrant {
+	position: absolute;
+	height: 50%;
+}
+
 .quadrant{
 	float:left;
 	position: relative;
