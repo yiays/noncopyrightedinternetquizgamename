@@ -1,6 +1,0 @@
-discord.py
-asyncio
-aiohttp
-pprint
-configparser
-pillow

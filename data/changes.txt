@@ -1,4 +1,0 @@
-# [0.0.1]
- - Kahoot.Discord bot created, based on merely as a template.
- - Kahoot.Discord is a recreation of the kahoot game to discord servers.
- - Currently supports playing kahoot, adding questions, reading the privacy policy.
