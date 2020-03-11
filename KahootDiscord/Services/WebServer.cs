@@ -3,7 +3,7 @@ using System.Web;
 
 namespace KahootDiscord.Services
 {
-    public class WebServer : IHttpModule
+    /*public class WebServer : IHttpModule
     {
         /// <summary>
         /// You will need to configure this module in the Web.config file of your
@@ -30,5 +30,5 @@ namespace KahootDiscord.Services
         {
             //custom logging logic can go here
         }
-    }
+    }*/
 }

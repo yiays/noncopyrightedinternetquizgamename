@@ -1,3 +1,12 @@
 {
-  "token": "TOKEN HERE"
+  "token": "TOKEN HERE",
+  "verbose": 1,
+  "logchannel": 0,
+  "modchannel": 0,
+  "apiurl": "https://kahoot.yiays.com/",
+  "apiport": 8888,
+  "ver": "indev",
+  "superusers": [],
+  "questions": [],
+  "collections": []
 }
