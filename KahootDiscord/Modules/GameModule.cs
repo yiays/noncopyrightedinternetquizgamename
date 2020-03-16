@@ -34,7 +34,9 @@ namespace KahootDiscord.Modules
         public List<User> Party;
         public GameStates State;
         public int Timer;
-        public Question? Question;
+        public List<Question> Questions;
+        public int? CurrentQuestion;
+        public Discord.IGuildChannel Channel;
     }
     struct Question
     {
@@ -51,6 +53,7 @@ namespace KahootDiscord.Modules
         public string Username;
         public int Discriminator;
         public int Score;
+        public string Token;
     }
     struct Collection
     {
