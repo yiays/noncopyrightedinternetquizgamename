@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -12,6 +13,7 @@ namespace DiscordBot.Services
         private readonly DiscordSocketClient _discord;
         private readonly CommandService _commands;
         private IServiceProvider _provider;
+        public IConfiguration Config;
 
         public CommandHandlingService(IServiceProvider provider, DiscordSocketClient discord, CommandService commands)
         {

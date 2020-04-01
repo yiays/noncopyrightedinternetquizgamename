@@ -6,7 +6,5 @@
   "apiurl": "https://kahoot.yiays.com/",
   "apiport": 8888,
   "ver": "indev",
-  "superusers": [],
-  "questions": [],
-  "collections": []
+  "superusers": []
 }

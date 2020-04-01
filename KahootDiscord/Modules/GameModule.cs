@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 using System.Linq;
 using System.Text;
 
@@ -8,22 +9,30 @@ namespace KahootDiscord.Modules
     class GameModule
     {
         public List<Game> Games = new List<Game>();
+        public List<Game> ArchivedGames = new List<Game>();
         public List<Question> QuestionPool = new List<Question>();
+
+        private IConfiguration _config;
+        public Dictionary<string, Object> Config;
 
         public GameModule()
         {
-            
+            _config = new ConfigurationBuilder().AddJsonFile("game.js").Build();
+            ConfigurationBinder.Bind(_config, Config);
         }
 
-        public Game NewGame()
+        public Game NewGame(Discord.IGuildChannel channel, int countdown = 60)
         {
             // Start game with default settings
             var game = new Game
             {
                 Party = new List<User>(),
                 State = GameStates.lobbyopen,
-                Timer = 60
+                Timer = countdown,
+                Channel = channel
             };
+
+            Games.Add(game);
 
             return game;
         }
@@ -42,7 +51,7 @@ namespace KahootDiscord.Modules
     {
         public int Id;
         public string Title;
-        public string[] Questions;
+        public string[] Answers;
         public bool[] Correct;
         public int Timer;
         public User? Author;

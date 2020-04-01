@@ -10,24 +10,28 @@ using DiscordBot.Services;
 
 namespace DiscordBot
 {
-    class Program
+    public static class Globals
+    {
+        public static IConfiguration Config;
+    }
+
+    public class Program
     {
         static void Main(string[] args)
             => new Program().MainAsync().GetAwaiter().GetResult();
 
         private DiscordSocketClient _client;
-        private IConfiguration _config;
 
         public async Task MainAsync()
         {
             _client = new DiscordSocketClient();
-            _config = BuildConfig();
+            Globals.Config = BuildConfig();
 
             var services = ConfigureServices();
             services.GetRequiredService<LogService>();
             await services.GetRequiredService<CommandHandlingService>().InitializeAsync(services);
 
-            await _client.LoginAsync(TokenType.Bot, _config["token"]);
+            await _client.LoginAsync(TokenType.Bot, Globals.Config["token"]);
             await _client.StartAsync();
 
             await Task.Delay(-1);
@@ -44,7 +48,7 @@ namespace DiscordBot
                 .AddLogging()
                 .AddSingleton<LogService>()
                 // Extra
-                .AddSingleton(_config)
+                .AddSingleton(Globals.Config)
                 // Add additional services here...
                 .BuildServiceProvider();
         }
