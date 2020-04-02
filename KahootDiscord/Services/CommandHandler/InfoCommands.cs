@@ -79,7 +79,8 @@ namespace DiscordBot.Modules.CommandHandler
                             Name = "Play",
                             Value = "```play```"
                         }
-                    }
+                    },
+                    Color = new Color(247, 183, 49)
                 }.Build());
             }
         }

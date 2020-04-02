@@ -13,8 +13,7 @@ namespace KahootDiscord.Services.CommandHandler
         [Command("play")]
         public async Task Play(int _countdown = 60)
         {
-            gm.NewGame((IGuildChannel)Context.Channel, _countdown);
-            await Context.Channel.SendMessageAsync("time to play kahoot dude");
+            await gm.NewGame(Context.Channel, _countdown);
         }
     }
 }
